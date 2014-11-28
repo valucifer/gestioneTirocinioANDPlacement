@@ -2,12 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Valentino/Desktop/Placement/APIServer/ServerWebPlacement/src/java/it/unisa/integrazione/manager/concrete/ConcreteProfessor.java</file>
-            <file>file:/C:/Users/Valentino/Desktop/Placement/APIServer/ServerWebPlacement/src/java/it/unisa/tirocinio/database/ProfessorDBOperation.java</file>
-            <file>file:/C:/Users/Valentino/Desktop/Placement/APIServer/ServerWebPlacement/src/java/it/unisa/integrazione/servlet/AuthenticateUserServlet.java</file>
-            <file>file:/C:/Users/Valentino/Desktop/Placement/APIServer/ServerWebPlacement/src/java/it/unisa/integrazione/database/AuthenticateUser.java</file>
-            <file>file:/C:/Users/Valentino/Desktop/Placement/APIServer/ServerWebPlacement/src/java/it/unisa/tirocinio/servlet/InsertTrainingByProfessor.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
