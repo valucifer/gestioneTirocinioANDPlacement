@@ -51,7 +51,7 @@
 		
 		jQuery(document).ready(function($){
 			$("#tableNotifications tbody").empty();
-			$.get("http://localhost:8080/ServerWebPlacement/StudenteAttDetailsServlet",{}).done(function(e){
+			$.get("http://localhost:8080/gestioneTirocinio&Placement/StudenteAttDetailsServlet",{}).done(function(e){
 				alert("bho "+JSON.stringify(e));
 				var parsed = jQuery.parseJSON(e);
 				alert(parsed.StudentList);
