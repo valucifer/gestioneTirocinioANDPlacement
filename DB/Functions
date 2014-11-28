@@ -1,0 +1,33 @@
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: This function check if a cvPath is inserted into a StudentInformation table
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `checkCVExistence`(studentInformation int) RETURNS int(11)
+BEGIN
+DECLARE foundSet INT default false;
+declare cvPath varchar (100);
+declare selectCV cursor for select CurriculumVitaePATH from StudentInformation where CurriculumVitaePATH = ''  and idStudentInformation= studentInformation;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET foundSet = true;  
+open selectCV;
+fetch selectCV into cvPath;
+RETURN foundSet;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `checkATExistence`(studentInformation int) RETURNS int(11)
+BEGIN
+DECLARE foundSet INT default false;
+declare ATPath varchar (100);
+declare selectAT cursor for select AccademicTranscriptPATH from StudentInformation where AccademicTranscriptPATH = '' and idStudentInformation= studentInformation;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET foundSet = true;  
+open selectAT;
+fetch selectAT into ATPath;
+RETURN foundSet;
+END

@@ -1,0 +1,89 @@
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudentAttendence`()
+BEGIN
+
+SELECT * from StudentAttendence;
+
+
+END
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudentInformation`(in primaryKey int)
+BEGIN
+SELECT * from StudentInformation where idStudentInformation = primaryKey;
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `requestStartTraining`(IN  studentSerialNumber VARCHAR(45), IN FK_IDstundetInformation int)
+BEGIN
+declare pathCV VARCHAR(45);
+declare pathAT VARCHAR(45);
+
+
+declare selectCur CURSOR FOR SELECT CurriculumVitaePATH, AccademicTranscriptPATH FROM StudentInformation  = FK_IDstundetInformation;
+
+open selectCur;
+fetch selectCur into pathCV, pathAT;
+
+
+if pathCV IS null 
+	then SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CV not inserted.';
+	else if pathAT is null
+		THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Accademic Transcript not inserted.';
+	else 
+		insert into StudentAttendence values (studentSerialNumber, current_date);
+		UPDATE Student SET FK_StudentStatus = 2 WHERE serialNumber = studentSerialNumber;
+	
+END if;
+END if;
+
+END
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `storeUploadFile`(in CVPath Varchar(45), in ATPath Varchar(45), in serialNumber Varchar(45) )
+BEGIN
+
+DECLARE pathCV VARCHAR(45);
+DECLARE pathAT VARCHAR(45);
+DECLARE lastID int;
+DECLARE foundSet INT default false;
+DECLARE FK_studentInformation INT;
+-- Cursore for check if the FK of student status is setting or not
+DECLARE selectCur CURSOR FOR SELECT FK_idStudentInformation FROM Student WHERE Student.serialNumber = serialNumber AND FK_idStudentInformation != '' ;
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET foundSet = true; 
+open selectCur;
+fetch selectCur into FK_studentInformation;
+if foundSet=false
+	then
+	UPDATE StudentInformation Set CurriculumVitaePATH = CVPath , AccademicTranscriptPATH = ATPath WHERE idStudentInformation = FK_studentInformation;
+else if foundSet=true
+	then
+	INSERT INTO StudentInformation  (CurriculumVitaePATH, AccademicTranscriptPATH) values (CVPath,ATPath);
+	SET lastID = LAST_INSERT_ID();
+	UPDATE Student SET FK_idStudentInformation = lastID WHERE Student.serialNumber = serialNumber;
+END if;
+END if;
+ 
+
+END
