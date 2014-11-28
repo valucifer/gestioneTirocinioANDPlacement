@@ -4,6 +4,20 @@
 -- --------------------------------------------------------------------------------
 DELIMITER $$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRejectedTrainingMessage`(in primaryKey int)
+BEGIN
+select * from RejectedTrainingMessage where idRejectedTrainingMessage =primaryKey;
+END
+
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudentAttendence`()
 BEGIN
 
@@ -11,6 +25,7 @@ SELECT * from StudentAttendence;
 
 
 END
+
 
 
 -- --------------------------------------------------------------------------------
@@ -24,6 +39,7 @@ BEGIN
 SELECT * from StudentInformation where idStudentInformation = primaryKey;
 END
 
+
 -- --------------------------------------------------------------------------------
 -- Routine DDL
 -- Note: comments before and after the routine body will not be stored by the server
@@ -32,28 +48,36 @@ DELIMITER $$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `requestStartTraining`(IN  studentSerialNumber VARCHAR(45), IN FK_IDstundetInformation int)
 BEGIN
-declare pathCV VARCHAR(45);
-declare pathAT VARCHAR(45);
+declare pathCVCheck int;
+declare pathATCheck int;
+set pathCVCheck = checkCVExistence(FK_IDstundetInformation);
+set pathATCheck = checkATExistence(FK_IDstundetInformation);
 
-
-declare selectCur CURSOR FOR SELECT CurriculumVitaePATH, AccademicTranscriptPATH FROM StudentInformation  = FK_IDstundetInformation;
-
-open selectCur;
-fetch selectCur into pathCV, pathAT;
-
-
-if pathCV IS null 
+if pathCVCheck = false 
 	then SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CV not inserted.';
-	else if pathAT is null
+	else if pathATCheck =false
 		THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Accademic Transcript not inserted.';
 	else 
-		insert into StudentAttendence values (studentSerialNumber, current_date);
-		UPDATE Student SET FK_StudentStatus = 2 WHERE serialNumber = studentSerialNumber;
+		insert into StudentAttendence values (studentSerialNumber, current_date,studentSerialNumber)  ;
+		
 	
 END if;
 END if;
 
 END
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `setRejectedTrainingMessage`(in message longtext,in serialNumber varchar(45))
+BEGIN
+insert into RejectedTrainingMessage values (message,serialNumber);
+END
+
 
 -- --------------------------------------------------------------------------------
 -- Routine DDL
