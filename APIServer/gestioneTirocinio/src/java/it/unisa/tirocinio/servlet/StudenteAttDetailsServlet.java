@@ -52,7 +52,7 @@ public class StudenteAttDetailsServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Origin", "*");
         PrintWriter out = response.getWriter();
         try {
-            out.println("<!DOCTYPE html>");
+            /*out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet NewServlet</title>");
@@ -60,7 +60,7 @@ public class StudenteAttDetailsServlet extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet NewServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
-            out.println("</html>");
+            out.println("</html>");*/
             StudentAttendanceDetails details = new StudentAttendanceDetails();
             ArrayList<StudentTrainingInformation> dataToReturn = details.getStudentDetails();
             for (StudentTrainingInformation aStundetInfo : dataToReturn) {
@@ -73,7 +73,7 @@ public class StudenteAttDetailsServlet extends HttpServlet {
                 studentInfo.put("email", aStundetInfo.getStudent().getUniversityEmail());
                 studentList.put(studentInfo);
             }
-            out.println(studentList);
+            
             message.put("StudentList", studentList);
             response.getWriter().write(message.toString());
         } catch (ClassNotFoundException ex) {
@@ -83,7 +83,7 @@ public class StudenteAttDetailsServlet extends HttpServlet {
         } catch (JSONException ex) {
             Logger.getLogger(StudenteAttDetailsServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            //out.close();
+            out.close();
         }
     }
 
