@@ -111,3 +111,162 @@ END if;
  
 
 END
+
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertInnerTraining` ( in trainingDescription LONGTEXT, in FK_Professor INT, in FK_Department INT )
+BEGIN
+
+INSERT INTO OfferTraining (description, FK_Professor, FK_Department) values (trainingDescription, FK_Professor, FK_Department);
+
+END
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOuterTraining` ( in trainingDescription LONGTEXT, in FK_Department INT, in pkOrganization INT )
+BEGIN
+DECLARE professor INT;
+DECLARE selectProfessor CURSOR FOR SELECT FK_Professor FROM Organization WHERE idOrganization = pkOrganization;
+open selectProfessor;
+fetch selectProfessor INTO professor;
+
+INSERT INTO OfferTraining (description, FK_Organization, FK_Professor, FK_Department) values (trainingDescription, pkOrganization, professor, FK_Department);
+
+END
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOuterTraining` ( in trainingDescription LONGTEXT, in FK_Department INT, in pkOrganization INT, in professor INT )
+BEGIN
+
+INSERT INTO OfferTraining (description, FK_Organization, FK_Professor, FK_Department) values (trainingDescription, pkOrganization, professor, FK_Department);
+
+END
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOfferTraining` ( in pkTraining INT )
+BEGIN
+
+DELETE FROM OfferTraining WHERE idOfferTraining = pkTraining;
+
+END
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOfferTrainings` ( in department INT )
+BEGIN
+
+IF department IS null
+	then SELECT * FROM OfferTraining;
+else SELECT * FROM OfferTraining WHERE FK_Department = department;
+
+END IF;
+
+END
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getStudentTrainingStatus` ( in pkStudentStatus INT )
+BEGIN
+
+SELECT * FROM StudentStatus WHERE idStudentStatus = pkStudentStatus;
+
+END
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertClaimTraining` ( in description LONGTEXT, in title VARCHAR(45), in professor INT, in PK_Organization INT )
+BEGIN
+
+DECLARE lastId INT;
+
+if PK_Organization IS NULL
+then INSERT INTO ClaimTraining (description, title, FK_ClaimStatus, FK_Professor) values (description, title, professor);
+SET lastId = LAST_INSERT_ID();
+SELECT * FROM ClaimTraining WHERE idClaimTraining = lastId;
+else INSERT INTO ClaimTraining (description, title, FK_ClaimStatus, FK_Professor, FK_Organization) values (description, title, professor, PK_Organization);
+SET lastId = LAST_INSERT_ID();
+SELECT * FROM ClaimTraining WHERE idClaimTraining = lastId;
+end if;
+END
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `modifyClaimStatus` ( in pkClaimTraining INT, in newStatus INT )
+BEGIN
+
+UPDATE ClaimStatus SET FK_ClaimStatus = newStatus WHERE idClaimTraining = pkClaimTraining;
+
+END
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteRejectedTrainingMessage` ( in pkRejectedTraining INT )
+BEGIN
+
+DELETE FROM RejectedTrainingMessage WHERE idRejectedTrainingMessage = pkRejectedTraining;
+
+END
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOrganization` ( in account BIGINT, in naturalPerson INT, in professor INT, in companyName VARCHAR(45), in city VARCHAR(45), in phone VARCHAR(45), in email VARCHAR(45) )
+BEGIN
+
+INSERT INTO Organization ( companyName, city, address, phone, mail, FK_Account, FK_FisicPerson, FK_Professor) values (companyName, city, address, phone, email, account, naturalPerson, professor);
+
+END

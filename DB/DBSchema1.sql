@@ -140,17 +140,16 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Organization` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Organization` (
-  `idOrganization` INT NOT NULL,
-  `companyName` VARCHAR(45) NULL,
+  `idOrganization` INT NOT NULL AUTO_INCREMENT,
+  `companyName` VARCHAR(45) NOT NULL,
   `city` VARCHAR(45) NULL,
   `address` VARCHAR(45) NULL,
   `phone` VARCHAR(45) NULL,
   `email` VARCHAR(45) NULL,
   `FK_Account` BIGINT NOT NULL,
-  `FK_FisicPerson` INT NOT NULL,
-  `training` LONGTEXT NULL,
+  `FK_FisicPerson` INT NULL,
   `FK_Professor` INT NOT NULL,
-  PRIMARY KEY (`idOrganization`),
+  PRIMARY KEY (`idOrganization`, `companyName`),
   INDEX `fk_Organization_Account1_idx` (`FK_Account` ASC),
   INDEX `fk_Organization_FisicPerson1_idx` (`FK_FisicPerson` ASC),
   INDEX `fk_Organization_Professor1_idx` (`FK_Professor` ASC),
@@ -179,7 +178,8 @@ DROP TABLE IF EXISTS `mydb`.`ClaimTraining` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`ClaimTraining` (
   `idClaimTraining` INT NOT NULL,
-  `Description` VARCHAR(45) NULL,
+  `description` LONGTEXT NULL,
+  `title` VARCHAR(45) NULL,
   `FK_ClaimStatus` INT NOT NULL,
   `FK_Professor` INT NOT NULL,
   `FKOrganization` INT NULL,
@@ -270,8 +270,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Student` (
   CONSTRAINT `fk_Student_StudentInformation1`
     FOREIGN KEY (`FK_idStudentInformation`)
     REFERENCES `mydb`.`StudentInformation` (`idStudentInformation`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -334,15 +334,28 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`OfferTraining` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`OfferTraining` (
-  `idOfferTraining` INT NOT NULL,
-  `description` VARCHAR(45) NULL,
-  `Fk_Organization` VARCHAR(45) NULL,
-  `Organization_idOrganization` INT NOT NULL,
+  `idOfferTraining` INT NOT NULL AUTO_INCREMENT,
+  `description` LONGTEXT NULL,
+  `FK_Organization` INT NULL,
+  `FK_Professor` INT NOT NULL,
+  `FK_Department` INT NULL,
   PRIMARY KEY (`idOfferTraining`),
-  INDEX `fk_OfferTraining_Organization1_idx` (`Organization_idOrganization` ASC),
+  INDEX `fk_OfferTraining_Organization1_idx` (`FK_Organization` ASC),
+  INDEX `fk_OfferTraining_Professor1_idx` (`FK_Professor` ASC),
+  INDEX `fk_OfferTraining_Department1_idx` (`FK_Department` ASC),
   CONSTRAINT `fk_OfferTraining_Organization1`
-    FOREIGN KEY (`Organization_idOrganization`)
+    FOREIGN KEY (`FK_Organization`)
     REFERENCES `mydb`.`Organization` (`idOrganization`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_OfferTraining_Professor1`
+    FOREIGN KEY (`FK_Professor`)
+    REFERENCES `mydb`.`Professor` (`idProfessor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_OfferTraining_Department1`
+    FOREIGN KEY (`FK_Department`)
+    REFERENCES `mydb`.`Department` (`idDepartment`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
