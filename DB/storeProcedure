@@ -155,10 +155,10 @@ END
 -- --------------------------------------------------------------------------------
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOuterTraining` ( in trainingDescription LONGTEXT, in FK_Department INT, in pkOrganization INT, in professor INT )
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOuterTraining` ( in trainingDescription LONGTEXT, in pkOrganization INT, in pkProfessor INT, in pkDepartment INT)
 BEGIN
 
-INSERT INTO OfferTraining (description, FK_Organization, FK_Professor, FK_Department) values (trainingDescription, pkOrganization, professor, FK_Department);
+INSERT INTO OfferTraining (description, FK_Organization, FK_Professor, FK_Department) values (trainingDescription, pkOrganization, pkProfessor, pkDepartment);
 
 END
 
@@ -291,3 +291,36 @@ BEGIN
 SELECT * FROM Professor WHERE idProfessor = pkProfessor;
 
 END
+
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProfessorInformationByFK_Account` ( in pkFKAccount INT )
+BEGIN
+
+SELECT * FROM Professor WHERE FK_Account = pkFKAccount;
+
+END
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getDepartment` ( in pkDepartment INT )
+BEGIN
+
+SELECT * FROM Department WHERE idDepartment = pkDepartment;
+
+END
+

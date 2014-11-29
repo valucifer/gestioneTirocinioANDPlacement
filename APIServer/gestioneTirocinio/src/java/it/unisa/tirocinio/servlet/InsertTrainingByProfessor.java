@@ -55,7 +55,7 @@ public class InsertTrainingByProfessor extends HttpServlet {
             String description = "peppino";
             int primaryKey = 1;
             ProfessorDBOperation professor = new ProfessorDBOperation();
-            if(professor.setClaimTrainingByProfessorByFK_Account(description, primaryKey)){
+            if(professor.setOfferTrainingByProfessorByFK_Account(description, primaryKey)){
                 out.println("bella pe voi");
             }else{
                 out.println("vaff");
