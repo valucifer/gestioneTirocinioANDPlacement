@@ -136,7 +136,7 @@ END
 -- --------------------------------------------------------------------------------
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOuterTraining` ( in trainingDescription LONGTEXT, in FK_Department INT, in pkOrganization INT )
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOuterTrainingNoProfessor` ( in trainingDescription LONGTEXT, in FK_Department INT, in pkOrganization INT )
 BEGIN
 DECLARE professor INT;
 DECLARE selectProfessor CURSOR FOR SELECT FK_Professor FROM Organization WHERE idOrganization = pkOrganization;
