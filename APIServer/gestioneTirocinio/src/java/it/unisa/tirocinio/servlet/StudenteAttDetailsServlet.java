@@ -50,7 +50,7 @@ public class StudenteAttDetailsServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Origin", "*");
         PrintWriter out = response.getWriter();
         try {
-<<<<<<< Updated upstream
+            
             /*out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -60,8 +60,6 @@ public class StudenteAttDetailsServlet extends HttpServlet {
             out.println("<h1>Servlet NewServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");*/
-=======
->>>>>>> Stashed changes
             StudentAttendanceDetails details = new StudentAttendanceDetails();
             ArrayList<StudentTrainingInformation> dataToReturn = details.getStudentDetails();
             for (StudentTrainingInformation aStundetInfo : dataToReturn) {
@@ -74,10 +72,7 @@ public class StudenteAttDetailsServlet extends HttpServlet {
                 studentInfo.put("email", aStundetInfo.getStudent().getUniversityEmail());
                 studentList.put(studentInfo);
             }
-<<<<<<< Updated upstream
             
-=======
->>>>>>> Stashed changes
             message.put("StudentList", studentList);
             response.getWriter().write(message.toString());
         } catch (ClassNotFoundException ex) {
