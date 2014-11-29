@@ -5,12 +5,20 @@
  */
 package it.unisa.tirocinio.servlet;
 
+import it.unisa.integrazione.manager.concrete.ConcreteStudent;
+import it.unisa.tirocinio.database.StudentDBOperation;
+import it.unisa.tirocinio.database.StudentTrainingDBOperation;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -18,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class GetStudentTrainingStatus extends HttpServlet {
 
+    private final JSONObject message = new JSONObject();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -28,11 +38,22 @@ public class GetStudentTrainingStatus extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, JSONException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
+            StudentTrainingDBOperation aTrainingDBOperation = new StudentTrainingDBOperation();
+            StudentDBOperation aStudentDBOperation = new StudentDBOperation();
+            //get student informations by idAccount (table:Account)
+            ConcreteStudent aStudent = aStudentDBOperation.getInformationbyFK_Account(Integer.parseInt(request.getParameter("idAccount")));
+            String[] trainingStatusResult = aTrainingDBOperation.getStudentTrainingStatus(Integer.parseInt(aStudent.getPrimaryKey()));
+            message.put("status", trainingStatusResult[0]);
+            message.put("description", trainingStatusResult[1]);
+            out.println(message.toString());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GetStudentTrainingStatus.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(GetStudentTrainingStatus.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             out.close();
         }
@@ -50,7 +71,11 @@ public class GetStudentTrainingStatus extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (JSONException ex) {
+            Logger.getLogger(GetStudentTrainingStatus.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -64,7 +89,11 @@ public class GetStudentTrainingStatus extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (JSONException ex) {
+            Logger.getLogger(GetStudentTrainingStatus.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
