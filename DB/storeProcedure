@@ -162,6 +162,10 @@ INSERT INTO OfferTraining (description, FK_Organization, FK_Professor, FK_Depart
 
 END
 
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOfferTraining` ( in pkTraining INT )
 BEGIN
@@ -268,5 +272,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOrganization` ( in account BI
 BEGIN
 
 INSERT INTO Organization ( companyName, city, address, phone, mail, FK_Account, FK_FisicPerson, FK_Professor) values (companyName, city, address, phone, email, account, naturalPerson, professor);
+
+END
+
+
+
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProfessorInformationByPrimaryKey` ( in pkProfessor INT )
+BEGIN
+
+SELECT * FROM Professor WHERE idProfessor = pkProfessor;
 
 END
